@@ -14,6 +14,15 @@ The benchmark installs each requested server version into `.tmp/servers/<version
 launches it on a free local port, opens it with Playwright Chromium, waits for the
 browser `load` event, and writes results to `results/`.
 
+Generate the static report locally with:
+
+```sh
+npm run report -- --input results --output .tmp/pages
+```
+
+CI uploads the raw `results/` directory as an artifact. On `main` pushes, it also
+publishes the generated report to GitHub Pages.
+
 ## Metrics
 
 - Navigation timing from `performance.getEntriesByType('navigation')`
