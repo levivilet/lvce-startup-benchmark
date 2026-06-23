@@ -1,0 +1,55 @@
+name: Benchmark
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      versions:
+        description: '@lvce-editor/server versions or tags'
+        required: false
+        default: latest
+      iterations:
+        description: 'Measured iterations per version'
+        required: false
+        default: '3'
+      profile:
+        description: 'Record Playwright traces'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run type-check
+      - name: Run benchmark
+        run: |
+          PROFILE_FLAG=""
+          if [ "${{ github.event.inputs.profile || 'true' }}" = "true" ]; then
+            PROFILE_FLAG="--profile"
+          fi
+          npm run benchmark -- \
+            --versions "${{ github.event.inputs.versions || 'latest' }}" \
+            --iterations "${{ github.event.inputs.iterations || '3' }}" \
+            --warmups 1 \
+            --output results \
+            $PROFILE_FLAG
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: lvce-startup-benchmark-results
+          path: results/**
