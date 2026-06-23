@@ -1,0 +1,20 @@
+{
+  "name": "lvce-startup-benchmark",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "benchmark": "tsx src/main.ts",
+    "test": "node --import tsx --test \"test/**/*.test.ts\"",
+    "type-check": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.1",
+    "playwright": "^1.57.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
