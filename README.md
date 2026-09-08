@@ -36,6 +36,11 @@ Generate the static report locally with:
 npm run report -- --input results --output .tmp/pages
 ```
 
+Chart annotations are configured in `src/chartMarkers.ts` using the first affected
+`@lvce-editor/server` release. A `pendingLabel` explains a merged fix that has not
+shipped yet; replace it with a separate version marker when the fixed release is
+available, so annotations correspond to measured versions.
+
 CI uploads the raw `results/` directory as an artifact. On `main` pushes, it also
 publishes the generated report to GitHub Pages.
 
